@@ -1,13 +1,13 @@
-const _ = require('lodash')
-const mongo = require('../lib/mongo')
+const _ = require('lodash');
+const mongo = require('../lib/mongo');
 
 class BaseModel {
   constructor(name) {
-    this._name = name
+    this._name = name;
   }
 
   schema() {
-    throw new Error('must override in subclass')
+    throw new Error('must override in subclass');
   }
 
   defaultSchema() {
@@ -17,26 +17,25 @@ class BaseModel {
         type: Date,
         default: Date.now,
         required: true,
-        index: true
+        index: true,
       },
       modifiedAt: {
         type: Date,
         default: Date.now,
-        required: true
+        required: true,
       },
       deleted: {
         type: Boolean,
         default: false,
-        required: true
-      }
-    }
+        required: true,
+      },
+    };
   }
 
   build() {
-    let structure = _.extend(this.defaultSchema(), this.schema())
-    return mongo.buildModel(this._name, structure)
+    let structure = _.extend(this.defaultSchema(), this.schema());
+    return mongo.buildModel(this._name, structure);
   }
-
 }
 
-module.exports = BaseModel
+module.exports = BaseModel;

@@ -1,15 +1,11 @@
 {
   "name": "@sublet/hulk-dl-mongo",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "main": "src/index.js",
-  "description": "Data layer for the Mongo",
+  "description": "Mongo Data layer for the Hulk Express server",
   "repository": "",
   "license": "MIT",
   "scripts": {
-    "migrate:up": "knex migrate:latest",
-    "migrate:down": "knex migrate:rollback",
-    "seed": "knex seed:run --env development",
-    "seed:test": "knex seed:run --env test",
     "lint": "eslint \"**/*.js\"",
     "lint:fix": "eslint --fix \"**/*.js\"",
     "pretest": "knex migrate:latest && knex seed:run --env test",
@@ -20,11 +16,10 @@
     "format": "prettier --write \"**/*.{js,json,md}\""
   },
   "files": [
-    "src/**/*",
-    "bin/**/*"
+    "src/**/*"
   ],
   "engines": {
-    "node": ">=14.14.1"
+    "node": ">=14.14.0"
   },
   "pre-commit": [
     "format",

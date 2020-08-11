@@ -2,111 +2,114 @@ const { uuid } = require('uuidv4');
 
 class BaseService {
   constructor(model, serviceName) {
-    this._model = model
-    this._serviceName = serviceName
-    this._mongodb = model.build()
+    this._model = model;
+    this._serviceName = serviceName;
+    this._mongodb = model.build();
   }
 
   get serviceName() {
-    return this._serviceName
+    return this._serviceName;
   }
 
   async create(data) {
-    if (!data) throw new Error('Data is required')
-    return await this._mongodb.create(data)
+    if (!data) throw new Error('Data is required');
+    return await this._mongodb.create(data);
   }
 
   async createMany() {
-    return await this._mongodb.insertMany(...arguments)
+    return await this._mongodb.insertMany(...arguments);
   }
 
   async readOne(id) {
-    if (!id) throw new Error('id is required')
+    if (!id) throw new Error('id is required');
 
     const query = {
-      _id: id
-    }
+      _id: id,
+    };
 
-    let results = await this._mongodb.findOne(query).exec()
+    let results = await this._mongodb.findOne(query).exec();
 
     if (!results) {
-      throw new Error('Not found.')
+      throw new Error('Not found.');
     }
-    return results
+    return results;
   }
 
-  async readMany(query, { limit = 50, select = null, populate = null, sort = null } = {}) {
-    let cursor = this._mongodb.find(query)
-    if (limit) cursor.limit(+limit)
-    if (populate) populate.map(itm => cursor = cursor.populate(itm))
-    if (sort) cursor = cursor.sort(sort)
-    if (select) cursor = cursor.select(select)
-    let results = await cursor.exec()
-    return results.map(obj => obj.toClient())
+  async readMany(
+    query,
+    { limit = 50, select = null, populate = null, sort = null } = {},
+  ) {
+    let cursor = this._mongodb.find(query);
+    if (limit) cursor.limit(+limit);
+    if (populate) populate.map(itm => (cursor = cursor.populate(itm)));
+    if (sort) cursor = cursor.sort(sort);
+    if (select) cursor = cursor.select(select);
+    let results = await cursor.exec();
+    return results.map(obj => obj.toClient());
   }
 
   // https://davidburgos.blog/return-updated-document-mongoose/
-  async updateAndReturn(query, updates, options={}) {
-    if (!query) throw new Error('Query is invalid')
-    if (!updates) throw new Error('Update are invalid')
+  async updateAndReturn(query, updates, options = {}) {
+    if (!query) throw new Error('Query is invalid');
+    if (!updates) throw new Error('Update are invalid');
 
-    updates.modifiedAt = Date.now()
+    updates.modifiedAt = Date.now();
 
-    options.new = true
-    options.upsert = false
-    options.runValidators = true
+    options.new = true;
+    options.upsert = false;
+    options.runValidators = true;
 
-    return this._mongodb.findOneAndUpdate(query, updates, options)
+    return this._mongodb.findOneAndUpdate(query, updates, options);
   }
 
   async createOrUpdate(query, data) {
-    if (!query) throw new Error('query is required')
-    if (!data) throw new Error('data is required')
+    if (!query) throw new Error('query is required');
+    if (!data) throw new Error('data is required');
 
-    data.modifiedAt = Date.now()
+    data.modifiedAt = Date.now();
 
     const insertData = {
       _id: uuid(),
       createdAt: Date.now(),
-      deleted: false
-    }
+      deleted: false,
+    };
 
     return await this._mongodb
       .findOneAndUpdate(
         query,
         { $set: data, $setOnInsert: insertData },
-        { new: true, upsert: true }
+        { new: true, upsert: true },
       )
-      .exec()
+      .exec();
   }
 
   async findOne(query) {
-    const results = await this._mongodb.findOne(query).exec()
-    return (results) ? results.toClient() : results
+    const results = await this._mongodb.findOne(query).exec();
+    return results ? results.toClient() : results;
   }
-  
+
   async count() {
-    return await this._mongodb.countDocuments(...arguments).exec()
+    return await this._mongodb.countDocuments(...arguments).exec();
   }
-  
+
   async update() {
-    return await this._mongodb.update(...arguments).exec()
+    return await this._mongodb.update(...arguments).exec();
   }
 
   async updateMany() {
-    return await this._mongodb.updateMany(...arguments).exec()
+    return await this._mongodb.updateMany(...arguments).exec();
   }
 
   async delete() {
-    return await this._mongodb.deleteOne(...arguments).exec()
+    return await this._mongodb.deleteOne(...arguments).exec();
   }
 
   async deleteMany() {
-    return await this._mongodb.deleteMany(...arguments).exec()
+    return await this._mongodb.deleteMany(...arguments).exec();
   }
 
   aggregate(params) {
-    return this._mongodb.aggregate(params).exec()
+    return this._mongodb.aggregate(params).exec();
   }
 
   // prepare(obj) {
@@ -127,7 +130,6 @@ class BaseService {
   // delete() {
 
   // }
-
 }
 
-module.exports = BaseService
+module.exports = BaseService;

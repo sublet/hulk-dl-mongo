@@ -30,19 +30,19 @@ class MockData {
    * Clear out Mock Data
    */
   async clearMockData() {
-    console.log(1)
+    console.log(1);
     await accessCodeService.deleteAllRows();
-    console.log(1)
+    console.log(1);
     await organizationService.deleteAllRows();
-    console.log(1)
+    console.log(1);
     await settingService.deleteAllRows();
     await userService.deleteAllRows();
     await pointService.deleteAllRows();
-    console.log(1)
+    console.log(1);
     await publicationService.deleteAllRows();
     await caseService.deleteAllRows();
     await publicPointService.deleteAllRows();
-    console.log(1)
+    console.log(1);
     sinon.restore();
   }
 
