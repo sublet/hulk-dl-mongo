@@ -1,0 +1,53 @@
+{
+  "name": "@sublet/hulk-dl-mongo",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "description": "Data layer for the Mongo",
+  "repository": "",
+  "license": "MIT",
+  "scripts": {
+    "migrate:up": "knex migrate:latest",
+    "migrate:down": "knex migrate:rollback",
+    "seed": "knex seed:run --env development",
+    "seed:test": "knex seed:run --env test",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint --fix \"**/*.js\"",
+    "pretest": "knex migrate:latest && knex seed:run --env test",
+    "test": "nyc --reporter=html --reporter=text mocha test/**/*.* --exit",
+    "posttest": "knex seed:run --env development",
+    "test:unit": "mocha test/unit/*.* --exit",
+    "test:all": "mocha test/**/*.* --exit",
+    "format": "prettier --write \"**/*.{js,json,md}\""
+  },
+  "files": [
+    "src/**/*",
+    "bin/**/*"
+  ],
+  "engines": {
+    "node": ">=14.14.1"
+  },
+  "pre-commit": [
+    "format",
+    "lint"
+  ],
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "mongodb": "^3.6.0",
+    "mongoose": "^5.9.28",
+    "mongoose-autopopulate": "^0.12.2",
+    "uuidv4": "^6.2.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-mocha": "^7.0.1",
+    "hygen": "^5.0.3",
+    "mocha": "^7.1.1",
+    "moment": "^2.27.0",
+    "nyc": "^15.0.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.0.5",
+    "random-coordinates": "^1.0.1",
+    "sinon": "^9.0.2"
+  }
+}
