@@ -1,34 +1,31 @@
 const { uuid } = require('uuidv4');
+const Service = require('../lib/baseService')
 
-class BaseService {
-  constructor(model, serviceName) {
-    this._model = model;
-    this._serviceName = serviceName;
-    this._mongodb = model.build();
-  }
-
-  get serviceName() {
-    return this._serviceName;
-  }
-
+class BaseService extends Service {
   async create(data) {
     if (!data) throw new Error('Data is required');
-    return await this._mongodb.create(data);
+
+    await this._model.connect() // Connect
+    
+    if (this._database) return this._database.create(data);
   }
 
   async createMany() {
-    return await this._mongodb.insertMany(...arguments);
+    await this._model.connect() // Connect
+
+    return this._database.insertMany(...arguments);
   }
 
   async readOne(id) {
     if (!id) throw new Error('id is required');
 
+    await this._model.connect() // Connect
+
     const query = {
       _id: id,
     };
 
-    let results = await this._mongodb.findOne(query).exec();
-
+    let results = await this._database.findOne(query).exec();
     if (!results) {
       throw new Error('Not found.');
     }
@@ -39,7 +36,9 @@ class BaseService {
     query,
     { limit = 50, select = null, populate = null, sort = null } = {},
   ) {
-    let cursor = this._mongodb.find(query);
+    await this._model.connect() // Connect
+
+    let cursor = this._database.find(query);
     if (limit) cursor.limit(+limit);
     if (populate) populate.map(itm => (cursor = cursor.populate(itm)));
     if (sort) cursor = cursor.sort(sort);
@@ -53,18 +52,22 @@ class BaseService {
     if (!query) throw new Error('Query is invalid');
     if (!updates) throw new Error('Update are invalid');
 
+    await this._model.connect() // Connect
+
     updates.modifiedAt = Date.now();
 
     options.new = true;
     options.upsert = false;
     options.runValidators = true;
 
-    return this._mongodb.findOneAndUpdate(query, updates, options);
+    return this._database.findOneAndUpdate(query, updates, options);
   }
 
   async createOrUpdate(query, data) {
     if (!query) throw new Error('query is required');
     if (!data) throw new Error('data is required');
+
+    await this._model.connect() // Connect
 
     data.modifiedAt = Date.now();
 
@@ -74,7 +77,7 @@ class BaseService {
       deleted: false,
     };
 
-    return await this._mongodb
+    return this._database
       .findOneAndUpdate(
         query,
         { $set: data, $setOnInsert: insertData },
@@ -84,52 +87,47 @@ class BaseService {
   }
 
   async findOne(query) {
-    const results = await this._mongodb.findOne(query).exec();
+    await this._model.connect() // Connect
+
+    const results = await this._database.findOne(query).exec();
     return results ? results.toClient() : results;
   }
 
   async count() {
-    return await this._mongodb.countDocuments(...arguments).exec();
+    await this._model.connect() // Connect
+    
+    return this._database.countDocuments(...arguments).exec();
   }
 
   async update() {
-    return await this._mongodb.update(...arguments).exec();
+    await this._model.connect() // Connect
+    
+    return this._database.update(...arguments).exec();
   }
 
   async updateMany() {
-    return await this._mongodb.updateMany(...arguments).exec();
+    await this._model.connect() // Connect
+    
+    return this._database.updateMany(...arguments).exec();
   }
 
   async delete() {
-    return await this._mongodb.deleteOne(...arguments).exec();
+    await this._model.connect() // Connect
+    
+    return this._database.deleteOne(...arguments).exec();
   }
 
   async deleteMany() {
-    return await this._mongodb.deleteMany(...arguments).exec();
+    await this._model.connect() // Connect
+    
+    return this._database.deleteMany(...arguments).exec();
   }
 
-  aggregate(params) {
-    return this._mongodb.aggregate(params).exec();
+  async aggregate(params) {
+    await this._model.connect() // Connect
+    
+    return this._database.aggregate(params).exec();
   }
-
-  // prepare(obj) {
-  //   // console.log(this._mongodb.schema.toObject())
-  //   // obj = obj.toHexString()
-  //   console.log(typeof obj._id)
-  //   obj.id = obj._id
-  //   delete obj._id
-  //   delete obj.deleted
-  //   delete obj.__v
-  //   return obj
-  // }
-
-  // update(id, data) {
-
-  // }
-
-  // delete() {
-
-  // }
 }
 
 module.exports = BaseService;

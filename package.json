@@ -1,6 +1,6 @@
 {
   "name": "@sublet/hulk-dl-mongo",
-  "version": "0.1.2",
+  "version": "0.1.10",
   "main": "src/index.js",
   "description": "Mongo Data layer for the Hulk Express server",
   "repository": "",
@@ -26,23 +26,26 @@
     "lint"
   ],
   "dependencies": {
-    "bluebird": "^3.7.2",
-    "mongodb": "^3.6.0",
-    "mongoose": "^5.9.28",
-    "mongoose-autopopulate": "^0.12.2",
-    "uuidv4": "^6.2.2"
+    "aws-sdk": "^2.815.0",
+    "bluebird": "3.7.2",
+    "dynamoose": "^2.5.0",
+    "lodash": "4.17.20",
+    "mongodb": "3.6.3",
+    "mongoose": "5.11.8",
+    "mongoose-autopopulate": "0.12.3",
+    "uuidv4": "6.2.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^7.0.0",
-    "eslint-plugin-mocha": "^7.0.1",
-    "hygen": "^5.0.3",
-    "mocha": "^7.1.1",
-    "moment": "^2.27.0",
-    "nyc": "^15.0.1",
+    "eslint": "^7.16.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "hygen": "^6.0.3",
+    "mocha": "^8.2.1",
+    "moment": "^2.29.1",
+    "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.0.5",
+    "prettier": "^2.2.1",
     "random-coordinates": "^1.0.1",
-    "sinon": "^9.0.2"
+    "sinon": "^9.2.2"
   }
 }
