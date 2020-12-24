@@ -1,17 +1,17 @@
 const { uuid } = require('uuidv4');
-const Service = require('../lib/baseService')
+const Service = require('../lib/baseService');
 
 class BaseService extends Service {
   async create(data) {
     if (!data) throw new Error('Data is required');
 
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     if (this._database) return this._database.create(data);
   }
 
   async createMany() {
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     return this._database.insertMany(...arguments);
   }
@@ -19,7 +19,7 @@ class BaseService extends Service {
   async readOne(id) {
     if (!id) throw new Error('id is required');
 
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     const query = {
       _id: id,
@@ -36,7 +36,7 @@ class BaseService extends Service {
     query,
     { limit = 50, select = null, populate = null, sort = null } = {},
   ) {
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     let cursor = this._database.find(query);
     if (limit) cursor.limit(+limit);
@@ -52,7 +52,7 @@ class BaseService extends Service {
     if (!query) throw new Error('Query is invalid');
     if (!updates) throw new Error('Update are invalid');
 
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     updates.modifiedAt = Date.now();
 
@@ -67,7 +67,7 @@ class BaseService extends Service {
     if (!query) throw new Error('query is required');
     if (!data) throw new Error('data is required');
 
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     data.modifiedAt = Date.now();
 
@@ -87,45 +87,45 @@ class BaseService extends Service {
   }
 
   async findOne(query) {
-    await this._model.connect() // Connect
+    await this._model.connect(); // Connect
 
     const results = await this._database.findOne(query).exec();
     return results ? results.toClient() : results;
   }
 
   async count() {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.countDocuments(...arguments).exec();
   }
 
   async update() {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.update(...arguments).exec();
   }
 
   async updateMany() {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.updateMany(...arguments).exec();
   }
 
   async delete() {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.deleteOne(...arguments).exec();
   }
 
   async deleteMany() {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.deleteMany(...arguments).exec();
   }
 
   async aggregate(params) {
-    await this._model.connect() // Connect
-    
+    await this._model.connect(); // Connect
+
     return this._database.aggregate(params).exec();
   }
 }

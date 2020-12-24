@@ -7,7 +7,7 @@ class BaseModel {
   }
 
   connect() {
-    return mongo.connectToDatabase()
+    return mongo.connectToDatabase();
   }
 
   schema() {

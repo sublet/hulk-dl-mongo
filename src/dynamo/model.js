@@ -7,18 +7,22 @@ class BaseModel {
   }
 
   get ddb() {
-    return database.ddb
+    return database.ddb;
   }
 
   async connect(model) {
-    if (!model) throw new Error('Pass model into this method')
-    
-    await database.connectToDatabase()
-    
+    if (!model) throw new Error('Pass model into this method');
+
+    await database.connectToDatabase();
+
     // console.log(`#### Checking Table: ${process.env.HULK_DYNAMO_DBNAME}_${this._name}`)
 
-    if (database.tables.indexOf(`${process.env.HULK_DYNAMO_DBNAME}_${this._name}`) < 0) {
-      const tableInput = await this.createTableIndex(model)
+    if (
+      database.tables.indexOf(
+        `${process.env.HULK_DYNAMO_DBNAME}_${this._name}`,
+      ) < 0
+    ) {
+      const tableInput = await this.createTableIndex(model);
       tableInput.ProvisionedThroughput.ReadCapacityUnits = 2;
 
       // const standardInput = await model.table.create.request()
@@ -38,13 +42,13 @@ class BaseModel {
       //   console.dir(tableInput, { depth: 3 });
       // }
       try {
-        const results = await database.ddb.createTable(tableInput).promise()
+        const results = await database.ddb.createTable(tableInput).promise();
         if (results) {
-          console.log(`#### Table ${tableInput.TableName} created.`)
+          console.log(`#### Table ${tableInput.TableName} created.`);
         }
-      } catch(e) {
+      } catch (e) {
         if (e.message.toLowerCase().indexOf('table already exists') < 0) {
-          throw e
+          throw e;
         }
         //  else {
         //   console.log(`#### Table ${tableInput.TableName} already exists.`)
@@ -52,7 +56,7 @@ class BaseModel {
       }
     }
 
-    return Promise.resolve()
+    return Promise.resolve();
   }
 
   schema() {
@@ -65,21 +69,21 @@ class BaseModel {
       deleted: {
         type: Boolean,
         default: false,
-        required: true
-      }
+        required: true,
+      },
     };
   }
 
   build() {
-    if (!process.env.HULK_DYNAMO_DBNAME) throw new Error('DB Name not set.')
+    if (!process.env.HULK_DYNAMO_DBNAME) throw new Error('DB Name not set.');
 
-    let structure = _.extend(this.defaultSchema(), this.schema())
+    let structure = _.extend(this.defaultSchema(), this.schema());
 
-    return database.buildModel(this._name, structure)
+    return database.buildModel(this._name, structure);
   }
 
   createTableIndex(model) {
-    return model.table.create.request()
+    return model.table.create.request();
   }
 }
 

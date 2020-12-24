@@ -1,5 +1,5 @@
 class Service {
-  constructor(model, serviceName) {    
+  constructor(model, serviceName) {
     this._model = model;
     this._serviceName = serviceName;
     this._database = model.build();
@@ -10,11 +10,11 @@ class Service {
   }
 
   get db() {
-    return this._model
+    return this._model;
   }
 
   get model() {
-    return this._database
+    return this._database;
   }
 
   create() {

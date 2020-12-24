@@ -1,24 +1,24 @@
-const Service = require('../lib/baseService')
+const Service = require('../lib/baseService');
 
 class BaseService extends Service {
   async create(data) {
-    await this.db.connect(this.model) // Connect
+    await this.db.connect(this.model); // Connect
 
     const myObject = new this.model(data);
 
-    return myObject.save()
+    return myObject.save();
   }
 
   async findOne(query) {
-    await this.db.connect(this.model) // Connect
+    await this.db.connect(this.model); // Connect
 
-    return this.model.query(query).limit(1).exec()
+    return this.model.query(query).limit(1).exec();
   }
 
   async readMany(query) {
-    await this.db.connect(this.model) // Connect
+    await this.db.connect(this.model); // Connect
 
-    return this.model.query(query).exec()
+    return this.model.query(query).exec();
   }
 }
 

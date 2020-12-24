@@ -23,23 +23,21 @@ class Mongo {
   }
 
   get connected() {
-    return this.isConnected
+    return this.isConnected;
   }
 
   async connectToDatabase() {
     if (!this.isConnected) {
-      if (process.env.NODE_ENV !== 'production') console.log('## using new database connection');
+      if (process.env.NODE_ENV !== 'production')
+        console.log('## using new database connection');
 
-      const options = this._getOptions()
+      const options = this._getOptions();
 
       try {
-        const db = await mongoose.connect(
-          process.env.HULK_MONGO_URI,
-          options,
-        );
+        const db = await mongoose.connect(process.env.HULK_MONGO_URI, options);
         this.isConnected = db.connections[0].readyState;
-      } catch(e) {
-        throw new Error(e.message)
+      } catch (e) {
+        throw new Error(e.message);
       }
     } else {
       console.log('=> using existing database connection');
@@ -52,7 +50,7 @@ class Mongo {
       dbName: process.env.HULK_MONGO_DB,
       ssl: process.env.HULK_MONGO_SSL === 'true',
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     };
   }
 
