@@ -1,9 +1,13 @@
 const _ = require('lodash');
-const mongo = require('../lib/mongo');
+const mongo = require('./connect');
 
 class BaseModel {
   constructor(name) {
     this._name = name;
+  }
+
+  connect() {
+    return mongo.connectToDatabase();
   }
 
   schema() {
