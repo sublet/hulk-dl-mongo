@@ -45,6 +45,7 @@ class Connect {
       try {
         if (!this._tables) await this.fetchTables();
         dynamoose.aws.ddb.set(this._ddb);
+        this.isConnected = true
         return Promise.resolve();
       } catch (e) {
         throw new Error(e.message);
@@ -75,7 +76,7 @@ class Connect {
     return {
       type: String,
       default: uuidv4,
-      required: true,
+      hashKey: true
     };
   }
 
