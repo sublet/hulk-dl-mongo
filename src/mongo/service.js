@@ -102,7 +102,7 @@ class BaseService extends Service {
   async update() {
     await this._model.connect(); // Connect
 
-    return this._database.update(...arguments).exec();
+    return this._database.updateOne(...arguments).exec();
   }
 
   async updateMany() {

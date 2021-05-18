@@ -40,7 +40,8 @@ class Mongo {
         throw new Error(e.message);
       }
     } else {
-      console.log('=> using existing database connection');
+      if (process.env.NODE_ENV !== 'production')
+        console.log('=> using existing database connection');
       return Promise.resolve();
     }
   }
@@ -51,6 +52,7 @@ class Mongo {
       ssl: process.env.HULK_MONGO_SSL === 'true',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      poolSize: process.env.HULK_MONGO_POOLSIZE || 5,
     };
   }
 

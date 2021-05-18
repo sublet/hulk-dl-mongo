@@ -45,13 +45,14 @@ class Connect {
       try {
         if (!this._tables) await this.fetchTables();
         dynamoose.aws.ddb.set(this._ddb);
-        this.isConnected = true
+        this.isConnected = true;
         return Promise.resolve();
       } catch (e) {
         throw new Error(e.message);
       }
     } else {
-      console.log('=> using existing database connection');
+      if (process.env.NODE_ENV !== 'production')
+        console.log('=> using existing database connection');
       return Promise.resolve();
     }
   }
@@ -76,7 +77,7 @@ class Connect {
     return {
       type: String,
       default: uuidv4,
-      hashKey: true
+      hashKey: true,
     };
   }
 
