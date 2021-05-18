@@ -16,17 +16,6 @@ class DataLayer {
       process.env.HULK_MONGO_DB = this._config.mongo.db;
       process.env.HULK_MONGO_SSL = this._config.mongo.ssl;
       process.env.HULK_MONGO_POOLSIZE = this._config.mongo.poolSize;
-    } else if (this._config.dynamo) {
-      this._type = 'DYNAMO';
-      if (!this._config.dynamo.key) throw new Error('Key not set.');
-      if (!this._config.dynamo.secret) throw new Error('Secret not set.');
-      if (!this._config.dynamo.region) throw new Error('Region not set.');
-      if (!this._config.dynamo.name) throw new Error('DB Name not set.');
-
-      process.env.HULK_DYNAMO_KEY = this._config.dynamo.key;
-      process.env.HULK_DYNAMO_SECRET = this._config.dynamo.secret;
-      process.env.HULK_DYNAMO_REGION = this._config.dynamo.region;
-      process.env.HULK_DYNAMO_DBNAME = this._config.dynamo.name;
     } else {
       throw new Error('Database not defined.');
     }
@@ -35,8 +24,6 @@ class DataLayer {
   get Model() {
     if (this._type === 'MONGO') {
       return require('./mongo/model');
-    } else if (this._type === 'DYNAMO') {
-      return require('./dynamo/model');
     }
     throw new Error('Model Type not defined: ' + String(this._type));
   }
@@ -44,8 +31,6 @@ class DataLayer {
   get Service() {
     if (this._type === 'MONGO') {
       return require('./mongo/service');
-    } else if (this._type === 'DYNAMO') {
-      return require('./dynamo/service');
     }
     throw new Error('Service Type not defined: ' + String(this._type));
   }
