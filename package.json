@@ -1,6 +1,6 @@
 {
   "name": "@sublet/hulk-dl-mongo",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "main": "src/index.js",
   "description": "Mongo Data layer for the Hulk Express server",
   "repository": "",
@@ -26,9 +26,7 @@
     "lint"
   ],
   "dependencies": {
-    "aws-sdk": "^2.815.0",
     "bluebird": "3.7.2",
-    "dynamoose": "^2.5.0",
     "lodash": "4.17.20",
     "mongodb": "3.6.3",
     "mongoose": "5.11.8",

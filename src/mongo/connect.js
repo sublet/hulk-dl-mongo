@@ -40,7 +40,8 @@ class Mongo {
         throw new Error(e.message);
       }
     } else {
-      console.log('=> using existing database connection');
+      if (process.env.NODE_ENV !== 'production')
+        console.log('=> using existing database connection');
       return Promise.resolve();
     }
   }
