@@ -90,7 +90,7 @@ class Mongo {
       promiseLibrary: Promise,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      poolSize: process.env.HULK_MONGO_POOLSIZE || 5
+      poolSize: process.env.HULK_MONGO_POOLSIZE || 5,
     });
     await client.connect();
     return { client, db: client.db(process.env.HULK_MONGO_DB) };
