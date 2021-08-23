@@ -10,6 +10,10 @@ class BaseModel {
     return mongo.connectToDatabase();
   }
 
+  disconnect() {
+    return mongo.closeConnection();
+  }
+
   schema() {
     throw new Error('must override in subclass');
   }

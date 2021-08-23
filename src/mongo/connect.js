@@ -18,6 +18,7 @@ mongoose.set('useUnifiedTopology', true);
 class Mongo {
   constructor() {
     this.isConnected = false;
+    this.database = null;
 
     mongoose.Promise = Promise;
   }
@@ -28,22 +29,31 @@ class Mongo {
 
   async connectToDatabase() {
     if (!this.isConnected) {
-      if (process.env.NODE_ENV !== 'production')
+      if (process.env.NODE_ENV !== 'production' && process.env.HULK_DEBUGGER)
         console.log('## using new database connection');
 
       const options = this._getOptions();
 
       try {
-        const db = await mongoose.connect(process.env.HULK_MONGO_URI, options);
-        this.isConnected = db.connections[0].readyState;
+        this.database = await mongoose.connect(
+          process.env.HULK_MONGO_URI,
+          options,
+        );
+        this.isConnected = this.database.connections[0].readyState;
       } catch (e) {
         throw new Error(e.message);
       }
     } else {
-      if (process.env.NODE_ENV !== 'production')
+      if (process.env.NODE_ENV !== 'production' && process.env.HULK_DEBUGGER)
         console.log('=> using existing database connection');
       return Promise.resolve();
     }
+  }
+
+  closeConnection() {
+    mongoose.connection.close();
+    if (process.env.NODE_ENV !== 'production' && process.env.HULK_DEBUGGER)
+      console.log('## connection close');
   }
 
   _getOptions() {
@@ -52,6 +62,7 @@ class Mongo {
       ssl: process.env.HULK_MONGO_SSL === 'true',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      poolSize: process.env.HULK_MONGO_POOLSIZE || 5,
     };
   }
 
