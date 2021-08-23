@@ -1,6 +1,6 @@
 {
   "name": "@sublet/hulk-dl-mongo",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "src/index.js",
   "description": "Mongo Data layer for the Hulk Express server",
   "repository": "",

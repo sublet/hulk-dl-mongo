@@ -2,6 +2,9 @@ const { uuid } = require('uuidv4');
 const Service = require('../lib/baseService');
 
 class BaseService extends Service {
+  closeDatabaseConnection() {
+    this._model.disconnect()
+  }
   async create(data) {
     if (!data) throw new Error('Data is required');
 
@@ -102,7 +105,7 @@ class BaseService extends Service {
   async update() {
     await this._model.connect(); // Connect
 
-    return this._database.update(...arguments).exec();
+    return this._database.updateOne(...arguments).exec();
   }
 
   async updateMany() {
