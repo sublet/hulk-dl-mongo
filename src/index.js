@@ -10,7 +10,7 @@ class DataLayer {
     process.env.HULK_MONGO_SSL = this._config.ssl;
     process.env.HULK_MONGO_POOLSIZE = this._config.poolSize;
 
-    this.services = null
+    this.services = null;
   }
 
   get Model() {
@@ -23,20 +23,20 @@ class DataLayer {
 
   build() {
     if (!this.services) {
-      let service = null
-      this.services = {}
+      let service = null;
+      this.services = {};
       fs.readdirSync(`${this._config.servicesPath}/`).forEach(file => {
-        service = require(`${this._config.servicesPath}/${file}`)
+        service = require(`${this._config.servicesPath}/${file}`);
         this.services[service.serviceName] = service;
-      })
+      });
     }
-    return this.services
+    return this.services;
   }
 
   closeConnections() {
-    const key = Object.keys(this.services)[0]
-    this.services[key].closeDatabaseConnection()
+    const key = Object.keys(this.services)[0];
+    this.services[key].closeDatabaseConnection();
   }
 }
 
-module.exports = config => new DataLayer(config)
+module.exports = config => new DataLayer(config);

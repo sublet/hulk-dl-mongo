@@ -3,7 +3,7 @@ const Service = require('../lib/baseService');
 
 class BaseService extends Service {
   closeDatabaseConnection() {
-    this._model.disconnect()
+    this._model.disconnect();
   }
   async create(data) {
     if (!data) throw new Error('Data is required');
